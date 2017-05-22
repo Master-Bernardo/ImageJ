@@ -157,8 +157,10 @@ public class DM_U2_4b implements PlugIn {
 		 */
 		private static final long serialVersionUID = 1L;
 		private JSlider jSliderBrightness;
+		private JSlider jSliderContrast;
 		private JSlider jSlider2;
 		private double brightness;
+		private double contrast;
 
 		CustomWindow(ImagePlus imp, ImageCanvas ic) {
             super(imp, ic);
@@ -171,8 +173,10 @@ public class DM_U2_4b implements PlugIn {
 
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
+            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 5);
             jSlider2 = makeTitledSlider("Slider2-Wert", 0, 100, 50);
             panel.add(jSliderBrightness);
+            panel.add(jSliderContrast);
             panel.add(jSlider2);
             
             add(panel);
@@ -210,6 +214,12 @@ public class DM_U2_4b implements PlugIn {
 				brightness = slider.getValue()-100;
 				String str = "Helligkeit " + brightness; 
 				setSliderTitle(jSliderBrightness, str); 
+			}
+			
+			if (slider == jSliderContrast) {
+				brightness = slider.getValue()-100;
+				String str = "Kontrast " + contrast; 
+				setSliderTitle(jSliderContrast, str); 
 			}
 			
 			if (slider == jSlider2) {
