@@ -184,7 +184,7 @@ public class DM_U2_4b implements PlugIn {
         	//TODO hier werden neue Panels hinzugefügt
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
-            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 1);
+            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 5);
             jSlider2 = makeTitledSlider("Slider2-Wert", 0, 100, 50);
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);

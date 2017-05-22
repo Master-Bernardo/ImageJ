@@ -116,21 +116,19 @@ public class DM_U2_4b implements PlugIn {
 	public static double[] YCbCr2RGB(double y, double cb, double cr, double brightness, double contrast){
 		double[] result = new double[3];
 		//r
-		double rPre = y+1.402*cr;
-		double r = contrast*(rPre-127.5)+127.5+brightness;
+		double rPre = y+1.402*cr+brightness;
+		double r = contrast*(rPre-127.5)+127.5;
 		//avoid overflow
 		if(r>255)r=255;
 		if(r<0)r=0;
 		result[0]=r;
 		//g
-		double gPre =y-0.3441*cb-0.7141*cr;
-		double g = contrast*(gPre-127.5)+127.5+brightness;
+		double g =y-0.3441*cb-0.7141*cr+brightness;
 		if(g>255)g=255;
 		if(g<0)g=0;
 		result[1]=g;
 		//b
-		double bPre = y+1.772*cb;
-		double b = contrast*(bPre-127.5)+127.5+brightness;
+		double b = y+1.772*cb+brightness;
 		if(b>255)b=255;
 		if(b<0)b=0;
 		result[2]=b;
@@ -184,7 +182,7 @@ public class DM_U2_4b implements PlugIn {
         	//TODO hier werden neue Panels hinzugefügt
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
-            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 1);
+            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 5);
             jSlider2 = makeTitledSlider("Slider2-Wert", 0, 100, 50);
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
