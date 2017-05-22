@@ -1,0 +1,4 @@
+INDEX VERSION 1.130+C:\Users\Windows 10\Desktop\GDM-4b\ImageJ\plugins\.metadata\.plugins\org.eclipse.jdt.core
+1228030831.index
+1904741536.index
+3878457715.index
