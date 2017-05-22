@@ -128,8 +128,7 @@ public class DM_U2_4b implements PlugIn {
 		//double cb= (Math.sin(phi)*crSat+Math.cos(phi)*cbSat)*hue;
 		
 		//selbst setzen
-		double cr= hue*Math.cos(phi);
-		double cb= hue*Math.sin(phi);
+		
 		
 		//r
 		double rPre = y+1.402*cr;

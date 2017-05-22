@@ -123,13 +123,8 @@ public class DM_U2_4b implements PlugIn {
 		//hue
 		double phi;
 		phi= Math.atan(cbPre/crPre);  //deltacb /deltacr
-		//drehung
-		//double cr= (Math.cos(phi)*crSat-Math.sin(phi)*cbSat)*hue;
-		//double cb= (Math.sin(phi)*crSat+Math.cos(phi)*cbSat)*hue;
-		
-		//selbst setzen
-		double cr= hue*Math.cos(phi);
-		double cb= hue*Math.sin(phi);
+		double cr= Math.cos(phi)*crSat-Math.sin(phi)*cbSat;
+		double cb= Math.sin(phi)*crSat+Math.cos(phi)*cbSat;
 		
 		//r
 		double rPre = y+1.402*cr;

@@ -84,7 +84,10 @@ public class DM_U2_4b implements PlugIn {
         
         new CustomWindow(imp, cc);
     }
-
+	
+	/*
+	 * Konvertiert RGB in CbCr (Rechnet mit doubles da ints in der Rechnung an genauingkeit verlieren
+	 */
 	public static double[] RGB2YCbCr(double r, double g, double b){
 		double[] result = new double[3];
 		//Y
@@ -106,21 +109,39 @@ public class DM_U2_4b implements PlugIn {
 		result[2]=y+1.772*cb;
 		return result;
 	}
-	public static double[] YCbCr2RGB(double y, double cb, double cr, double brightness){
+	//TODO Bildmanipulation hier hinzufügen
+	/*
+	 * Konvertiert YCbCr in RGB mit Helligkeitsänderung
+	 */
+	public static double[] YCbCr2RGB(double y, double cbPre, double crPre, double brightness, double contrast, double saturation, double hue){
 		double[] result = new double[3];
+		
+		//saturation
+		double cbSat=cbPre*(saturation/10);
+		double crSat=crPre*(saturation/10);
+		
+		//hue
+		double phi;
+		phi= Math.atan(cbPre/crPre);  //deltacb /deltacr
+		double cr= Math.cos(phi)*cbSat-Math.sin(phi)*crSat;
+		double cb= Math.sin(phi)*cbSat+Math.cos(phi)*crSat;
+		
 		//r
-		double r = y+1.402*cr+brightness;
+		double rPre = y+1.402*cr;
+		double r = (contrast/10)*(rPre-127.5)+127.5+brightness;
 		//avoid overflow
 		if(r>255)r=255;
 		if(r<0)r=0;
 		result[0]=r;
 		//g
-		double g =y-0.3441*cb-0.7141*cr+brightness;
+		double gPre =y-0.3441*cb-0.7141*cr;
+		double g = (contrast/10)*(gPre-127.5)+127.5+brightness;
 		if(g>255)g=255;
 		if(g<0)g=0;
 		result[1]=g;
 		//b
-		double b = y+1.772*cb+brightness;
+		double bPre = y+1.772*cb;
+		double b = (contrast/10)*(bPre-127.5)+127.5+brightness;
 		if(b>255)b=255;
 		if(b<0)b=0;
 		result[2]=b;
@@ -156,10 +177,15 @@ public class DM_U2_4b implements PlugIn {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+		//TODO hier neue Slider und Variablen initializieren
 		private JSlider jSliderBrightness;
 		private JSlider jSliderContrast;
-		private JSlider jSlider2;
+		private JSlider jSliderSaturation;
+		private JSlider jSliderHue;
 		private double brightness;
+		private double contrast = 10;  //default
+		private double saturation = 10;
+		private double hue=120;
 
 		CustomWindow(ImagePlus imp, ImageCanvas ic) {
             super(imp, ic);
@@ -169,14 +195,16 @@ public class DM_U2_4b implements PlugIn {
         void addPanel() {
         	//JPanel panel = new JPanel();
         	Panel panel = new Panel();
-
+        	//TODO hier werden neue Panels hinzugefügt
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
-            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 5);
-            jSlider2 = makeTitledSlider("Slider2-Wert", 0, 100, 50);
+            jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
+            jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
+            jSliderHue = makeTitledSlider("Farbe", 0, 360, 0);
             panel.add(jSliderBrightness);
-            panel.add(jjSliderContrast);
-            panel.add(jSlider2);
+            panel.add(jSliderContrast);
+            panel.add(jSliderSaturation);
+            panel.add(jSliderHue);
             
             add(panel);
             
@@ -208,17 +236,29 @@ public class DM_U2_4b implements PlugIn {
 
 		public void stateChanged( ChangeEvent e ){
 			JSlider slider = (JSlider)e.getSource();
-
+			//TODO hier kommt auch was zu den Slidern
 			if (slider == jSliderBrightness) {
 				brightness = slider.getValue()-100;
 				String str = "Helligkeit " + brightness; 
 				setSliderTitle(jSliderBrightness, str); 
 			}
 			
-			if (slider == jSlider2) {
-				int value = slider.getValue();
-				String str = "Slider2-Wert " + value; 
-				setSliderTitle(jSlider2, str); 
+			if (slider == jSliderContrast) {
+				contrast = slider.getValue();
+				String str = "Kontrast " + contrast; 
+				setSliderTitle(jSliderContrast, str); 
+			}
+			
+			if (slider == jSliderSaturation) {
+				saturation = slider.getValue();
+				String str = "Sättigung " + saturation; 
+				setSliderTitle(jSliderSaturation, str); 
+			}
+			
+			if (slider == jSliderHue) {
+				hue = slider.getValue();
+				String str = "Farbe " + hue; 
+				setSliderTitle(jSliderHue, str); 
 			}
 			
 			changePixelValues(imp.getProcessor());
@@ -253,7 +293,9 @@ public class DM_U2_4b implements PlugIn {
 					int cb=(int) (ycbcr[1]+0.5);
 					int cr=(int) (ycbcr[2]+0.5);
 					
-					double[]rgb = YCbCr2RGB(Y,cb,cr,brightness);
+					//TODO
+					//hier wird das Bild manipuliert
+					double[]rgb = YCbCr2RGB(Y,cb,cr,brightness, contrast, saturation, hue);
 					int rn= (int) (rgb[0]+0.5);
 					int gn= (int) (rgb[1]+0.5);
 					int bn= (int) (rgb[2]+0.5);

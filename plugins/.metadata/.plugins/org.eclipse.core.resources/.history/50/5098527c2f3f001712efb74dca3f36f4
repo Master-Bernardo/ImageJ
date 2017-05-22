@@ -123,13 +123,8 @@ public class DM_U2_4b implements PlugIn {
 		//hue
 		double phi;
 		phi= Math.atan(cbPre/crPre);  //deltacb /deltacr
-		//drehung
-		//double cr= (Math.cos(phi)*crSat-Math.sin(phi)*cbSat)*hue;
-		//double cb= (Math.sin(phi)*crSat+Math.cos(phi)*cbSat)*hue;
-		
-		//selbst setzen
-		double cr= hue*Math.cos(phi);
-		double cb= hue*Math.sin(phi);
+		double cr= Math.cos(phi)*cbSat-Math.sin(phi)*crSat;
+		double cb= Math.sin(phi)*cbSat+Math.cos(phi)*crSat;
 		
 		//r
 		double rPre = y+1.402*cr;
@@ -189,8 +184,8 @@ public class DM_U2_4b implements PlugIn {
 		private JSlider jSliderHue;
 		private double brightness;
 		private double contrast = 10;  //default
-		private double saturation = 10;
-		private double hue;
+		private double saturation;
+		private double hue=120;
 
 		CustomWindow(ImagePlus imp, ImageCanvas ic) {
             super(imp, ic);
