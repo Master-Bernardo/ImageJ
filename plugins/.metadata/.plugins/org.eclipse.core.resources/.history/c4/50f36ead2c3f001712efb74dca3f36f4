@@ -117,8 +117,8 @@ public class DM_U2_4b implements PlugIn {
 		double[] result = new double[3];
 		
 		//saturation
-		double cb=cbPre*(saturation/10);
-		double cr=crPre*(saturation/10);
+		double cb=cbPre*saturation;
+		double cr=crPre*saturation;
 		
 		//r
 		double rPre = y+1.402*cr;
@@ -244,7 +244,7 @@ public class DM_U2_4b implements PlugIn {
 			}
 			
 			if (slider == jSliderSaturation) {
-				saturation = slider.getValue();
+				saturation = slider.getValue()/10;
 				String str = "Sättigung " + saturation; 
 				setSliderTitle(jSliderSaturation, str); 
 			}

@@ -117,8 +117,8 @@ public class DM_U2_4b implements PlugIn {
 		double[] result = new double[3];
 		
 		//saturation
-		double cb=cbPre*(saturation/10);
-		double cr=crPre*(saturation/10);
+		double cb=cbPre*saturation;
+		double cr=crPre*saturation;
 		
 		//r
 		double rPre = y+1.402*cr;
@@ -177,7 +177,7 @@ public class DM_U2_4b implements PlugIn {
 		private JSlider jSliderSaturation;
 		private JSlider jSliderHue;
 		private double brightness;
-		private double contrast = 10;  //default
+		private double contrast = 1;  //default
 		private double saturation;
 		private double hue;
 
@@ -193,7 +193,7 @@ public class DM_U2_4b implements PlugIn {
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
             jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
-            jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
+            jSliderSaturation = makeTitledSlider("Sättigung", 0, 5, 1);
             jSliderHue = makeTitledSlider("Farbe", 0, 360, 0);
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
@@ -244,13 +244,13 @@ public class DM_U2_4b implements PlugIn {
 			}
 			
 			if (slider == jSliderSaturation) {
-				saturation = slider.getValue();
+				int value = slider.getValue();
 				String str = "Sättigung " + saturation; 
 				setSliderTitle(jSliderSaturation, str); 
 			}
 			
 			if (slider == jSliderHue) {
-				hue = slider.getValue();
+				int value = slider.getValue();
 				String str = "Farbe " + hue; 
 				setSliderTitle(jSliderHue, str); 
 			}
