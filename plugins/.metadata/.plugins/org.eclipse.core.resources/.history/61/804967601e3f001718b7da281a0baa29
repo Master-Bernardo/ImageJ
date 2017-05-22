@@ -184,7 +184,7 @@ public class DM_U2_4b implements PlugIn {
         	//TODO hier werden neue Panels hinzugefügt
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
-            jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
+            jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 1);
             jSlider2 = makeTitledSlider("Slider2-Wert", 0, 100, 50);
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
@@ -228,7 +228,7 @@ public class DM_U2_4b implements PlugIn {
 			}
 			
 			if (slider == jSliderContrast) {
-				contrast = slider.getValue();
+				contrast = slider.getValue()*10;
 				String str = "Kontrast " + contrast; 
 				setSliderTitle(jSliderContrast, str); 
 			}
