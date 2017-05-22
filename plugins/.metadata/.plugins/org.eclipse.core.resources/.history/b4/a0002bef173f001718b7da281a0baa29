@@ -109,7 +109,6 @@ public class DM_U2_4b implements PlugIn {
 		result[2]=y+1.772*cb;
 		return result;
 	}
-	//TODO Bildmanipulation hier hinzufügen
 	/*
 	 * Konvertiert YCbCr in RGB mit Helligkeitsänderung
 	 */

@@ -109,7 +109,6 @@ public class DM_U2_4b implements PlugIn {
 		result[2]=y+1.772*cb;
 		return result;
 	}
-	//TODO Bildmanipulation hier hinzufügen
 	/*
 	 * Konvertiert YCbCr in RGB mit Helligkeitsänderung
 	 */
@@ -163,7 +162,6 @@ public class DM_U2_4b implements PlugIn {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		//TODO hier neue Slider und Variablen initializieren
 		private JSlider jSliderBrightness;
 		private JSlider jSliderContrast;
 		private JSlider jSlider2;
@@ -217,7 +215,7 @@ public class DM_U2_4b implements PlugIn {
 
 		public void stateChanged( ChangeEvent e ){
 			JSlider slider = (JSlider)e.getSource();
-			//TODO hier kommt auch was zu den Slidern
+
 			if (slider == jSliderBrightness) {
 				brightness = slider.getValue()-100;
 				String str = "Helligkeit " + brightness; 

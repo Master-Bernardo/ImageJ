@@ -84,10 +84,7 @@ public class DM_U2_4b implements PlugIn {
         
         new CustomWindow(imp, cc);
     }
-	
-	/*
-	 * Konvertiert RGB in CbCr (Rechnet mit doubles da ints in der Rechnung an genauingkeit verlieren
-	 */
+
 	public static double[] RGB2YCbCr(double r, double g, double b){
 		double[] result = new double[3];
 		//Y
@@ -109,10 +106,6 @@ public class DM_U2_4b implements PlugIn {
 		result[2]=y+1.772*cb;
 		return result;
 	}
-	//TODO Bildmanipulation hier hinzufügen
-	/*
-	 * Konvertiert YCbCr in RGB mit Helligkeitsänderung
-	 */
 	public static double[] YCbCr2RGB(double y, double cb, double cr, double brightness){
 		double[] result = new double[3];
 		//r
@@ -163,7 +156,6 @@ public class DM_U2_4b implements PlugIn {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		//TODO hier neue Slider und Variablen initializieren
 		private JSlider jSliderBrightness;
 		private JSlider jSliderContrast;
 		private JSlider jSlider2;
@@ -178,7 +170,7 @@ public class DM_U2_4b implements PlugIn {
         void addPanel() {
         	//JPanel panel = new JPanel();
         	Panel panel = new Panel();
-        	//TODO hier werden neue Panels hinzugefügt
+
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
             jSliderContrast = makeTitledSlider("Kontrast", 0, 10, 5);
@@ -217,7 +209,7 @@ public class DM_U2_4b implements PlugIn {
 
 		public void stateChanged( ChangeEvent e ){
 			JSlider slider = (JSlider)e.getSource();
-			//TODO hier kommt auch was zu den Slidern
+
 			if (slider == jSliderBrightness) {
 				brightness = slider.getValue()-100;
 				String str = "Helligkeit " + brightness; 
@@ -225,7 +217,7 @@ public class DM_U2_4b implements PlugIn {
 			}
 			
 			if (slider == jSliderContrast) {
-				contrast = slider.getValue();
+				brightness = slider.getValue()-100;
 				String str = "Kontrast " + contrast; 
 				setSliderTitle(jSliderContrast, str); 
 			}
@@ -268,8 +260,6 @@ public class DM_U2_4b implements PlugIn {
 					int cb=(int) (ycbcr[1]+0.5);
 					int cr=(int) (ycbcr[2]+0.5);
 					
-					//TODO
-					//hier wird das Bild manipuliert
 					double[]rgb = YCbCr2RGB(Y,cb,cr,brightness);
 					int rn= (int) (rgb[0]+0.5);
 					int gn= (int) (rgb[1]+0.5);
