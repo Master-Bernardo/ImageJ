@@ -121,15 +121,11 @@ public class DM_U2_4b implements PlugIn {
 		double crSat=crPre*(saturation/10);
 		
 		//hue
-		double phi;
-		phi= Math.atan(cbPre/crPre);  //deltacb /deltacr
+		double phi = hue;  //deltacb /deltacr
 		//drehung
-		//double cr= (Math.cos(phi)*crSat-Math.sin(phi)*cbSat)*hue;
-		//double cb= (Math.sin(phi)*crSat+Math.cos(phi)*cbSat)*hue;
+		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
+		double cr= (-(Math.sin(phi))*cbSat+Math.cos(phi)*crSat);
 		
-		//selbst setzen
-		double cr= hue*Math.cos(phi);
-		double cb= hue*Math.sin(phi);
 		
 		//r
 		double rPre = y+1.402*cr;
@@ -205,7 +201,7 @@ public class DM_U2_4b implements PlugIn {
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
             jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
             jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
-            jSliderHue = makeTitledSlider("Farbe", 0, 360, 0);
+            jSliderHue = makeTitledSlider("Farbe", 0, 360, 180);
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
             panel.add(jSliderSaturation);
