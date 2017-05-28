@@ -121,7 +121,7 @@ public class DM_U2_4b implements PlugIn {
 		double crSat=crPre*(saturation/10);
 		
 		//hue
-		double phi = hue;  //deltacb /deltacr
+		double phi = hue/60+3;  //deltacb /deltacr
 		//drehung
 		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
 		double cr= (-(Math.sin(phi))*cbSat+Math.cos(phi)*crSat);

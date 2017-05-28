@@ -113,8 +113,20 @@ public class DM_U2_4b implements PlugIn {
 	/*
 	 * Konvertiert YCbCr in RGB mit Helligkeitsänderung
 	 */
-	public static double[] YCbCr2RGB(double y, double cb, double cr, double brightness, double contrast){
+	public static double[] YCbCr2RGB(double y, double cbPre, double crPre, double brightness, double contrast, double saturation, double hue){
 		double[] result = new double[3];
+		
+		//saturation
+		double cbSat=cbPre*(saturation/10);
+		double crSat=crPre*(saturation/10);
+		
+		//hue
+		double phi = hue/70+3;  //deltacb /deltacr
+		//drehung
+		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
+		double cr= (-(Math.sin(phi))*cbSat+Math.cos(phi)*crSat);
+		
+		
 		//r
 		double rPre = y+1.402*cr;
 		double r = (contrast/10)*(rPre-127.5)+127.5+brightness;
@@ -172,8 +184,8 @@ public class DM_U2_4b implements PlugIn {
 		private JSlider jSliderSaturation;
 		private JSlider jSliderHue;
 		private double brightness;
-		private double contrast = 1;  //default
-		private double saturation;
+		private double contrast = 10;  //default
+		private double saturation = 10;
 		private double hue;
 
 		CustomWindow(ImagePlus imp, ImageCanvas ic) {
@@ -188,8 +200,8 @@ public class DM_U2_4b implements PlugIn {
             panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
             jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
-            jSliderSaturation = makeTitledSlider("Sättigung", 0, 5, 1);
-            jSliderHue = makeTitledSlider("Farbe", 0, 360, 0);
+            jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
+            jSliderHue = makeTitledSlider("Farbe", 0, 360, 180);
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
             panel.add(jSliderSaturation);
@@ -239,15 +251,15 @@ public class DM_U2_4b implements PlugIn {
 			}
 			
 			if (slider == jSliderSaturation) {
-				int value = slider.getValue();
-				String str = "Slider2-Wert " + value; 
+				saturation = slider.getValue();
+				String str = "Sättigung " + saturation; 
 				setSliderTitle(jSliderSaturation, str); 
 			}
 			
-			if (slider == jSliderSaturation) {
-				int value = slider.getValue();
-				String str = "Slider2-Wert " + value; 
-				setSliderTitle(jSliderSaturation, str); 
+			if (slider == jSliderHue) {
+				hue = slider.getValue();
+				String str = "Farbe " + hue; 
+				setSliderTitle(jSliderHue, str); 
 			}
 			
 			changePixelValues(imp.getProcessor());
@@ -284,7 +296,7 @@ public class DM_U2_4b implements PlugIn {
 					
 					//TODO
 					//hier wird das Bild manipuliert
-					double[]rgb = YCbCr2RGB(Y,cb,cr,brightness, contrast);
+					double[]rgb = YCbCr2RGB(Y,cb,cr,brightness, contrast, saturation, hue);
 					int rn= (int) (rgb[0]+0.5);
 					int gn= (int) (rgb[1]+0.5);
 					int bn= (int) (rgb[2]+0.5);
