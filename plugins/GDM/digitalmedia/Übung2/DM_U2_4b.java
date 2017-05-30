@@ -127,6 +127,7 @@ public class DM_U2_4b implements PlugIn {
 		double cr= (-(Math.sin(phi))*cbSat+Math.cos(phi)*crSat);
 		
 		
+		
 		//r
 		double rPre = y+1.402*cr;
 		double r = (contrast/10)*(rPre-127.5)+127.5+brightness;
@@ -184,9 +185,10 @@ public class DM_U2_4b implements PlugIn {
 		private JSlider jSliderSaturation;
 		private JSlider jSliderHue;
 		private double brightness;
-		private double contrast = 10;  //default
+		//default
+		private double contrast = 10;  
 		private double saturation = 10;
-		private double hue;
+		private double hue = 180;
 
 		CustomWindow(ImagePlus imp, ImageCanvas ic) {
             super(imp, ic);
