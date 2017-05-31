@@ -47,7 +47,7 @@ public class DM_U2_4b implements PlugIn {
 		
 		DM_U2_4b pw = new DM_U2_4b();
 		pw.imp = IJ.getImage();
-		pw.run("");
+		while(true)pw.run("");
 	}
     
 

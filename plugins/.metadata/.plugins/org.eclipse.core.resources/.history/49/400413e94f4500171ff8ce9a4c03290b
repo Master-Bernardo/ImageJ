@@ -13,11 +13,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -32,11 +29,6 @@ public class DM_U2_4b implements PlugIn {
 	private int[] origPixels;
 	private int width;
 	private int height;
-	//default
-	private static double brightness = 1;
-	private static double contrast = 10;  
-	private static double saturation = 10;
-	private static double hue = 180;
 	
 	
     public static void main(String args[]) {
@@ -129,8 +121,8 @@ public class DM_U2_4b implements PlugIn {
 		double crSat=crPre*(saturation/10);
 		
 		//hue
-		double phi = hue/60+3;  //deltacb /deltacr      phis sollte MAth.pi/2   irgendsowas  - Winkel von grad in rad umwandeln
-		//double phi = hue/(2*Math.PI)+128;
+		//double phi = hue/60+3;  //deltacb /deltacr      phis sollte MAth.pi/2   irgendsowas  - Winkel von grad in rad umwandeln
+		double phi = hue/(2*Math.PI)/15;
 		//drehung
 		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
 		double cr= (-(Math.sin(phi))*cbSat+Math.cos(phi)*crSat);
@@ -193,9 +185,11 @@ public class DM_U2_4b implements PlugIn {
 		private JSlider jSliderContrast;
 		private JSlider jSliderSaturation;
 		private JSlider jSliderHue;
-		private JButton defaultButton;
-		
-		
+		private double brightness;
+		//default
+		private double contrast = 10;  
+		private double saturation = 10;
+		private double hue = 180;
 
 		CustomWindow(ImagePlus imp, ImageCanvas ic) {
             super(imp, ic);
@@ -206,20 +200,15 @@ public class DM_U2_4b implements PlugIn {
         	//JPanel panel = new JPanel();
         	Panel panel = new Panel();
         	//TODO hier werden neue Panels hinzugefügt
-            panel.setLayout(new GridLayout(5, 1));
+            panel.setLayout(new GridLayout(4, 1));
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
             jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
             jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
             jSliderHue = makeTitledSlider("Farbe", 0, 360, 180);
-          //defaultButton
-    		defaultButton = new JButton("Default");
-    		 defaultButton.addActionListener(new ButtonClass());
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
             panel.add(jSliderSaturation);
             panel.add(jSliderHue);
-            panel.add(defaultButton);
-           
             
             add(panel);
             
@@ -323,17 +312,4 @@ public class DM_U2_4b implements PlugIn {
 		}
 		
     } // CustomWindow inner class
-    
-    //ButtonCLass
-    public class ButtonClass implements ActionListener{
-    	public void actionPerformed(ActionEvent e){
-    		brightness = 1;
-    		contrast = 10;  
-    		saturation = 10;
-    		hue = 180;
-    		imp.updateAndDraw();
-    	}
-    }
 } 
-
-

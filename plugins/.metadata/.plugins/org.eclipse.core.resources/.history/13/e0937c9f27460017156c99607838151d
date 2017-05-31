@@ -331,7 +331,6 @@ public class DM_U2_4b implements PlugIn {
     		contrast = 10;  
     		saturation = 10;
     		hue = 180;
-    		imp.updateAndDraw();
     	}
     }
 } 

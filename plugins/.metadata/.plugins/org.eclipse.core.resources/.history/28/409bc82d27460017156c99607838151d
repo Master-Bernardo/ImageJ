@@ -13,8 +13,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -33,10 +31,10 @@ public class DM_U2_4b implements PlugIn {
 	private int width;
 	private int height;
 	//default
-	private static double brightness = 1;
-	private static double contrast = 10;  
-	private static double saturation = 10;
-	private static double hue = 180;
+	private double brightness = 1;
+	private double contrast = 10;  
+	private double saturation = 10;
+	private double hue = 180;
 	
 	
     public static void main(String args[]) {
@@ -213,13 +211,19 @@ public class DM_U2_4b implements PlugIn {
             jSliderHue = makeTitledSlider("Farbe", 0, 360, 180);
           //defaultButton
     		defaultButton = new JButton("Default");
-    		 defaultButton.addActionListener(new ButtonClass());
             panel.add(jSliderBrightness);
             panel.add(jSliderContrast);
             panel.add(jSliderSaturation);
             panel.add(jSliderHue);
             panel.add(defaultButton);
-           
+            defaultButton.addActionListener(new java.awt.event.ActionListerner8(){
+            	public void actionPerformed(java.awt.event.ActionEvent e) {
+            		brightness = 1;
+            		contrast = 10;  
+            		saturation = 10;
+            		hue = 180;
+            	}
+            });
             
             add(panel);
             
@@ -323,17 +327,4 @@ public class DM_U2_4b implements PlugIn {
 		}
 		
     } // CustomWindow inner class
-    
-    //ButtonCLass
-    public class ButtonClass implements ActionListener{
-    	public void actionPerformed(ActionEvent e){
-    		brightness = 1;
-    		contrast = 10;  
-    		saturation = 10;
-    		hue = 180;
-    		imp.updateAndDraw();
-    	}
-    }
 } 
-
-

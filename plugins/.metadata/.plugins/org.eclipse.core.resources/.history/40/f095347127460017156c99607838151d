@@ -14,7 +14,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -325,13 +324,12 @@ public class DM_U2_4b implements PlugIn {
     } // CustomWindow inner class
     
     //ButtonCLass
-    public class ButtonClass implements ActionListener{
+    public class ButtonClass{
     	public void actionPerformed(ActionEvent e){
     		brightness = 1;
     		contrast = 10;  
     		saturation = 10;
     		hue = 180;
-    		imp.updateAndDraw();
     	}
     }
 } 

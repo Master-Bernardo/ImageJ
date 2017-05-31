@@ -250,7 +250,7 @@ public class DM_U2_4b implements PlugIn {
 		}
 
 		public void stateChanged( ChangeEvent e ){
-			JSlider slider = (JSlider)e.getSource();
+			while(true){JSlider slider = (JSlider)e.getSource();
 			//TODO hier kommt auch was zu den Slidern
 			if (slider == jSliderBrightness) {
 				brightness = slider.getValue()-100;
@@ -279,6 +279,7 @@ public class DM_U2_4b implements PlugIn {
 			changePixelValues(imp.getProcessor());
 			
 			imp.updateAndDraw();
+			}
 		}
 
 
