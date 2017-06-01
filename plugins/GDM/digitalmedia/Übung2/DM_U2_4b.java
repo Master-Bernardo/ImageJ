@@ -117,7 +117,7 @@ public class DM_U2_4b implements PlugIn {
 		result[2]=y+1.772*cb;
 		return result;
 	}
-	//TODO Bildmanipulation hier hinzufügen
+	//TODO #slider(vielleicht)Bildmanipulation hier hinzufügen
 	/*
 	 * Konvertiert YCbCr in RGB mit Helligkeitsänderung
 	 */
@@ -129,8 +129,9 @@ public class DM_U2_4b implements PlugIn {
 		double crSat=crPre*(saturation/10);
 		
 		//hue
-		double phi = hue/60+3;  //deltacb /deltacr      phis sollte MAth.pi/2   irgendsowas  - Winkel von grad in rad umwandeln
+		//double phi = hue/60+3;  //deltacb /deltacr      phis sollte MAth.pi/2   irgendsowas  - Winkel von grad in rad umwandeln
 		//double phi = hue/(2*Math.PI)+128;
+		double phi = (hue-180)*Math.PI/180;
 		//drehung
 		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
 		double cr= (-(Math.sin(phi))*cbSat+Math.cos(phi)*crSat);
@@ -251,7 +252,7 @@ public class DM_U2_4b implements PlugIn {
 
 		public void stateChanged( ChangeEvent e ){
 			JSlider slider = (JSlider)e.getSource();
-			//TODO hier kommt auch was zu den Slidern
+			//TODO #slider hier kommt auch was zu den Slidern
 			if (slider == jSliderBrightness) {
 				brightness = slider.getValue()-100;
 				String str = "Helligkeit " + brightness; 
