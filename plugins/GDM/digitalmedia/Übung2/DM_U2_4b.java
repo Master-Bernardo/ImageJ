@@ -125,12 +125,14 @@ public class DM_U2_4b implements PlugIn {
 		double[] result = new double[3];
 		
 		//saturation
+		//TODO #last hier statt 10 vielleicht was anderes
 		double cbSat=cbPre*(saturation/10);
 		double crSat=crPre*(saturation/10);
-		
+	
 		//hue
 		//double phi = hue/60+3;  //deltacb /deltacr      phis sollte MAth.pi/2   irgendsowas  - Winkel von grad in rad umwandeln
 		//double phi = hue/(2*Math.PI)+128;
+		//vielleicht ist das die Änderung in rad
 		double phi = (hue-180)*Math.PI/180;
 		//drehung
 		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
@@ -140,6 +142,7 @@ public class DM_U2_4b implements PlugIn {
 		
 		//r
 		double rPre = y+1.402*cr;
+		//TODO #last    hier die Zahl nach dem Kontrast
 		double r = (contrast/10)*(rPre-127.5)+127.5+brightness;
 		//avoid overflow
 		if(r>255)r=255;
@@ -208,7 +211,8 @@ public class DM_U2_4b implements PlugIn {
         	Panel panel = new Panel();
         	//TODO hier werden neue Panels hinzugefügt
             panel.setLayout(new GridLayout(5, 1));
-            jSliderBrightness = makeTitledSlider("Helligkeit", 0, 200, 100);
+            //TODO #last Anfangs und End und DefaultWerte
+            jSliderBrightness = makeTitledSlider("Helligkeit", 0, 256, 128);
             jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
             jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
             jSliderHue = makeTitledSlider("Farbe", 0, 360, 180);
@@ -252,9 +256,9 @@ public class DM_U2_4b implements PlugIn {
 
 		public void stateChanged( ChangeEvent e ){
 			JSlider slider = (JSlider)e.getSource();
-			//TODO #slider hier kommt auch was zu den Slidern
+			//TODO #last hier kommt auch was zu den Slidern
 			if (slider == jSliderBrightness) {
-				brightness = slider.getValue()-100;
+				brightness = slider.getValue()-128;
 				String str = "Helligkeit " + brightness; 
 				setSliderTitle(jSliderBrightness, str); 
 			}
