@@ -14,6 +14,7 @@ import ij.process.ImageProcessor;
 import java.awt.Panel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Random;
 
 import javax.swing.JComboBox;
 
@@ -26,6 +27,7 @@ public class DM_U3 implements PlugIn {
 	private int[] origPixels;
 	private int width;
 	private int height;
+	Random randomer = new Random();
 
 	String[] items = { "Original", "Rot-Kanal", "Negativ", "Graustufen",
 			"Binärbild", "5 Graustufen", "10 Graustufen", "32 Graustufen",
@@ -337,9 +339,13 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO e)
-					int rn = r;
-					int gn = g;
-					int bn = b;
+					//Greyercode
+					int greyvalue = (int) (r*0.299+g*0.587+b*0.114);
+					greyvalue+=randomer.nextInt(100)-50;
+					if(greyvalue<128)greyvalue=0;
+					else greyvalue = 255;
+					int rn,gn,bn;
+					rn = gn = bn =greyvalue;
 					pixels[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 				}
 			}		
@@ -347,6 +353,7 @@ public class DM_U3 implements PlugIn {
 
 		private void errorDiffusion(int[] origPixels, int[] pixels, int width, int height) 
 		{
+			int error=0;
 			for (int y=0; y<height; y++) {
 				for (int x=0; x<width; x++) {
 					int pos = y*width + x;
@@ -356,9 +363,20 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO f)
-					int rn = r;
-					int gn = g;
-					int bn = b;
+					//Greyercode
+					int greyvalue = (int) (r*0.299+g*0.587+b*0.114);
+					greyvalue = greyvalue-error;
+					if(greyvalue>=128){
+						error = 255-greyvalue;
+						greyvalue=255;
+					}
+					else{
+						error = 0-greyvalue;
+						greyvalue=0;
+					}
+					
+					int rn,gn,bn;
+					rn = gn = bn =greyvalue;
 					pixels[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 				}
 			}
@@ -375,9 +393,12 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO g)
-					int rn = r;
-					int gn = g;
-					int bn = b;
+					int rn = (int) (0.393*r+0.769*g+0.189*b);
+					int gn = (int) (0.349*r+0.686*g+0.168*b);
+					int bn = (int) (0.272*r+0.534*g+0.131*b);
+					if(rn>255)rn=255;
+					if(gn>255)gn=255;
+					if(bn>255)bn=255;
 					pixels[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 				}
 			}		
@@ -385,6 +406,25 @@ public class DM_U3 implements PlugIn {
 
 		private void mapImageTo6Colors(int[] origPixels, int[] pixels, int width, int height) 
 		{
+			int color1R;
+			int color1G;
+			int color1B;
+			int color2R;
+			int color2G;
+			int color2B;
+			int color3R;
+			int color3G;
+			int color3B;
+			int color4R;
+			int color4G;
+			int color4B;
+			int color5R;
+			int color5G;
+			int color5B;
+			int color6R;
+			int color6G;
+			int color6B;
+			
 			for (int y=0; y<height; y++) {
 				for (int x=0; x<width; x++) {
 					int pos = y*width + x;
