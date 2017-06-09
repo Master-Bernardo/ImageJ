@@ -328,19 +328,28 @@ public class DM_U2_4b implements PlugIn {
 				}
 			}
 		}
+		//ButtonCLass
+	    public class ButtonClass implements ActionListener{
+	    	public void actionPerformed(ActionEvent e){
+	    		brightness = 1;
+	    		contrast = 10;  
+	    		saturation = 10;
+	    		hue = 180;
+	    		
+	    		jSliderBrightness.setValue(128);
+	    		jSliderContrast.setValue(20);
+	    		jSliderSaturation.setValue(10);
+	    		jSliderHue.setValue(180);
+	    		
+	    		changePixelValues(imp.getProcessor());
+				
+				imp.updateAndDraw();
+	    	}
+	    }
 		
     } // CustomWindow inner class
     
-    //ButtonCLass
-    public class ButtonClass implements ActionListener{
-    	public void actionPerformed(ActionEvent e){
-    		brightness = 1;
-    		contrast = 10;  
-    		saturation = 10;
-    		hue = 180;
-    		imp.updateAndDraw();
-    	}
-    }
+    
 } 
 
 
