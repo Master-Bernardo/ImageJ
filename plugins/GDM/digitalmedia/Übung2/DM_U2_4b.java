@@ -42,7 +42,7 @@ public class DM_U2_4b implements PlugIn {
     public static void main(String args[]) {
 		//new ImageJ();
     	conversionTest();
-    	IJ.open("C:/Users/Windows 10/Desktop/ImageJ/plugins/GDM/digitalmedia/Übung2/orchid.jpg");
+    	IJ.open("C:\\Users\\Windows 10\\Desktop\\ImageJ\\plugins\\GDM\\digitalmedia\\Übung2\\orchid.jpg");
     	//IJ.open("Z:/Pictures/Beispielbilder/orchid.jpg");
 		
 		DM_U2_4b pw = new DM_U2_4b();
@@ -129,10 +129,7 @@ public class DM_U2_4b implements PlugIn {
 		double cbSat=cbPre*(saturation/10);
 		double crSat=crPre*(saturation/10);
 	
-		//hue
-		//double phi = hue/60+3;  //deltacb /deltacr      phis sollte MAth.pi/2   irgendsowas  - Winkel von grad in rad umwandeln
-		//double phi = hue/(2*Math.PI)+128;
-		//vielleicht ist das die Änderung in rad
+		//hue- das gleich von hue slider machen lassen
 		double phi = (hue-180)*Math.PI/180;
 		//drehung
 		double cb= (Math.cos(phi)*cbSat+Math.sin(phi)*crSat);
@@ -142,7 +139,6 @@ public class DM_U2_4b implements PlugIn {
 		
 		//r
 		double rPre = y+1.402*cr;
-		//TODO #last    hier die Zahl nach dem Kontrast
 		double r = (contrast/10)*(rPre-127.5)+127.5+brightness;
 		//avoid overflow
 		if(r>255)r=255;

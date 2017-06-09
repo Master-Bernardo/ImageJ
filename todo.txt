@@ -1,6 +1,0 @@
-Aufgabe 2 fertig
-Aufgabe 3:
-- Helligkeit; finito
-- Kontrast: !
-- Farbsättigung: !
-- Änderung der Farbe (Hue) durch Drehung der Farb-Ebene bzw. des CbCr-Vektors um einen vorgebbaren Winkel (0 bis 360°): !
