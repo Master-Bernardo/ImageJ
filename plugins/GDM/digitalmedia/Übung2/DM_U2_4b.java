@@ -213,7 +213,7 @@ public class DM_U2_4b implements PlugIn {
             panel.setLayout(new GridLayout(5, 1));
             //TODO #last Anfangs und End und DefaultWerte
             jSliderBrightness = makeTitledSlider("Helligkeit", 0, 256, 128);
-            jSliderContrast = makeTitledSlider("Kontrast", 0, 100, 10);
+            jSliderContrast = makeTitledSlider("Kontrast", 0, 40, 20);
             jSliderSaturation = makeTitledSlider("Sättigung", 0, 50, 10);
             jSliderHue = makeTitledSlider("Farbe", 0, 360, 180);
           //defaultButton
@@ -265,13 +265,15 @@ public class DM_U2_4b implements PlugIn {
 			
 			if (slider == jSliderContrast) {
 				contrast = slider.getValue();
-				String str = "Kontrast " + contrast; 
+				if(contrast<=20)contrast = contrast/2;
+				else contrast = (contrast-10);
+				String str = "Kontrast " + contrast/10; 
 				setSliderTitle(jSliderContrast, str); 
 			}
 			
 			if (slider == jSliderSaturation) {
 				saturation = slider.getValue();
-				String str = "Sättigung " + saturation; 
+				String str = "Sättigung " + saturation/10; 
 				setSliderTitle(jSliderSaturation, str); 
 			}
 			
