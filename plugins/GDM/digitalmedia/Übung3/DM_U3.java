@@ -406,24 +406,30 @@ public class DM_U3 implements PlugIn {
 
 		private void mapImageTo6Colors(int[] origPixels, int[] pixels, int width, int height) 
 		{
-			int color1R;
-			int color1G;
-			int color1B;
-			int color2R;
-			int color2G;
-			int color2B;
-			int color3R;
-			int color3G;
-			int color3B;
-			int color4R;
-			int color4G;
-			int color4B;
-			int color5R;
-			int color5G;
-			int color5B;
-			int color6R;
-			int color6G;
-			int color6B;
+			//balck
+			int color1R = 0;
+			int color1G = 0;
+			int color1B = 0;
+			//weiﬂ
+			int color2R = 255;
+			int color2G = 255;
+			int color2B = 255;
+			//hellbraun
+			int color3R = 108;
+			int color3G = 97;
+			int color3B = 88;
+			//dunkelbraun
+			int color4R = 43;
+			int color4G = 46;
+			int color4B = 45;
+			//blau
+			int color5R = 55;
+			int color5G = 106;
+			int color5B = 141;
+			//hellgrau
+			int color6R = 198;
+			int color6G = 196;
+			int color6B = 197;
 			
 			for (int y=0; y<height; y++) {
 				for (int x=0; x<width; x++) {
@@ -434,9 +440,61 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO h)
-					int rn = r;
-					int gn = g;
-					int bn = b;
+					//Abst‰nde zwischen den 6 anderen Farben vergleichen
+					int distance1 = (int) Math.sqrt(Math.pow((color1R-r), 2)+Math.pow((color1G-g),2)+Math.pow((color1B-b),2));
+					int distance2 = (int) Math.sqrt(Math.pow((color2R-r), 2)+Math.pow((color2G-g),2)+Math.pow((color2B-b),2));
+					int distance3 = (int) Math.sqrt(Math.pow((color3R-r), 2)+Math.pow((color3G-g),2)+Math.pow((color3B-b),2));
+					int distance4 = (int) Math.sqrt(Math.pow((color4R-r), 2)+Math.pow((color4G-g),2)+Math.pow((color4B-b),2));
+					int distance5 = (int) Math.sqrt(Math.pow((color5R-r), 2)+Math.pow((color5G-g),2)+Math.pow((color5B-b),2));
+					int distance6 = (int) Math.sqrt(Math.pow((color6R-r), 2)+Math.pow((color6G-g),2)+Math.pow((color6B-b),2));
+					
+					//sorting algorythm
+					int[] distances = {distance1,distance2,distance3,distance4,distance5,distance6};
+					int smallestDistance = distances[0];
+					int smallestDistanceColor = 1;
+					for(int i=1;i<6;i++){
+						if (distances[i]<smallestDistance){
+							smallestDistance=distances[i];
+							smallestDistanceColor = i+1;
+						}
+					}
+					int rn = color1R;
+					int gn = color1G;
+					int bn = color1B;
+					switch(smallestDistanceColor){
+					
+					case 2:
+						rn = color2R;
+						gn = color2G;
+						bn = color2B;
+						break;
+					case 3:
+						rn = color3R;
+						gn = color3G;
+						bn = color3B;
+						break;
+					case 4:
+						rn = color4R;
+						gn = color4G;
+						bn = color4B;
+						break;
+					case 5:
+						rn = color5R;
+						gn = color5G;
+						bn = color5B;
+						break;
+					case 6:
+						rn = color6R;
+						gn = color6G;
+						bn = color6B;
+						break;
+					default:
+						rn = color1R;
+						gn = color1G;
+						bn = color1B;
+						break;
+					}
+					
 					pixels[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 				}
 			}
@@ -469,6 +527,9 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO j)
+					
+					
+					
 					int rn = r;
 					int gn = g;
 					int bn = b;
