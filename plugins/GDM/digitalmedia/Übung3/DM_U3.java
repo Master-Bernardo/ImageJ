@@ -1,4 +1,4 @@
-package digitalmedia.Übung3;
+package digitalmedia.ï¿½bung3;
 
 
 import ij.IJ;
@@ -410,7 +410,7 @@ public class DM_U3 implements PlugIn {
 			int color1R = 0;
 			int color1G = 0;
 			int color1B = 0;
-			//weiß
+			//weiï¿½
 			int color2R = 255;
 			int color2G = 255;
 			int color2B = 255;
@@ -440,7 +440,7 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO h)
-					//Abstände zwischen den 6 anderen Farben vergleichen
+					//Abstï¿½nde zwischen den 6 anderen Farben vergleichen
 					int distance1 = (int) Math.sqrt(Math.pow((color1R-r), 2)+Math.pow((color1G-g),2)+Math.pow((color1B-b),2));
 					int distance2 = (int) Math.sqrt(Math.pow((color2R-r), 2)+Math.pow((color2G-g),2)+Math.pow((color2B-b),2));
 					int distance3 = (int) Math.sqrt(Math.pow((color3R-r), 2)+Math.pow((color3G-g),2)+Math.pow((color3B-b),2));
