@@ -1,4 +1,4 @@
-package digitalmedia.�bung3;
+package digitalmedia.Übung3;
 
 
 import ij.IJ;

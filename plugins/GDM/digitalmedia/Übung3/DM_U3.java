@@ -1,4 +1,4 @@
-package digitalmedia.Übung3;
+package digitalmedia.Ãœbung3;
 
 
 import ij.IJ;
@@ -17,8 +17,6 @@ import java.awt.event.ItemListener;
 import java.util.Random;
 
 import javax.swing.JComboBox;
-
-// TestComment
 
 /**
      Opens an image window and adds a panel below the image
@@ -114,7 +112,6 @@ public class DM_U3 implements PlugIn {
 		}
 
 		private void changePixelValues(ImageProcessor ip) {
-
 			// Array zum ZurÃ¼ckschreiben der Pixelwerte
 			int[] pixels = (int[])ip.getPixels();
 			if (method.equals("Original")) {
@@ -343,7 +340,7 @@ public class DM_U3 implements PlugIn {
 					// TODO e)
 					//Greyercode
 					int greyvalue = (int) (r*0.299+g*0.587+b*0.114);
-					greyvalue+=randomer.nextInt(100)-50;
+					greyvalue+=randomer.nextInt(101)-50;
 					if(greyvalue<128)greyvalue=0;
 					else greyvalue = 255;
 					int rn,gn,bn;
@@ -367,7 +364,7 @@ public class DM_U3 implements PlugIn {
 					// TODO f)
 					//Greyercode
 					int greyvalue = (int) (r*0.299+g*0.587+b*0.114);
-					greyvalue = greyvalue-error;
+					greyvalue = greyvalue-error; //kann auch draufaddiert werden
 					if(greyvalue>=128){
 						error = 255-greyvalue;
 						greyvalue=255;
@@ -412,7 +409,7 @@ public class DM_U3 implements PlugIn {
 			int color1R = 0;
 			int color1G = 0;
 			int color1B = 0;
-			//weiß
+			//weiï¿½
 			int color2R = 255;
 			int color2G = 255;
 			int color2B = 255;
@@ -442,7 +439,7 @@ public class DM_U3 implements PlugIn {
 					int g = (argb >>  8) & 0xff;
 					int b =  argb        & 0xff;
 					// TODO h)
-					//Abstände zwischen den 6 anderen Farben vergleichen
+					//Abstï¿½nde zwischen den 6 anderen Farben vergleichen
 					int distance1 = (int) Math.sqrt(Math.pow((color1R-r), 2)+Math.pow((color1G-g),2)+Math.pow((color1B-b),2));
 					int distance2 = (int) Math.sqrt(Math.pow((color2R-r), 2)+Math.pow((color2G-g),2)+Math.pow((color2B-b),2));
 					int distance3 = (int) Math.sqrt(Math.pow((color3R-r), 2)+Math.pow((color3G-g),2)+Math.pow((color3B-b),2));
@@ -509,32 +506,19 @@ public class DM_U3 implements PlugIn {
 				for (int x=0; x<width; x++) {
 					int pos = y*width + x;
 					// TODO i)
-					int rn = 0;
+					int rn = (int) ((255.0/width)*x);
 					int gn = 0;
-					int bn = 0;
-					pixels[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
-				}
-			}
-		}
-		
-		//not required
-		private void floydSteinberg(int[] origPixels, int[] pixels, int width, int height) 
-		{
-			for (int y=0; y<height; y++) {
-				for (int x=0; x<width; x++) {
-					int pos = y*width + x;
-					int argb = origPixels[pos];  // Lesen der Originalwerte 
-
-					int r = (argb >> 16) & 0xff;
-					int g = (argb >>  8) & 0xff;
-					int b =  argb        & 0xff;
-					// TODO j)
+					int bn = 255-rn;		//((255/width)*-1)*x+255;
 					
 					
 					
-					int rn = r;
-					int gn = g;
-					int bn = b;
+					if(y<height/2){
+						//rn = (int) (rn*0.299+gn*0.587+bn*0.114);
+						rn+=randomer.nextInt(101)-50;
+						if(rn<128)rn=0;
+						else rn = 255;
+					}
+					
 					pixels[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 				}
 			}
