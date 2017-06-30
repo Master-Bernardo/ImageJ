@@ -1,4 +1,4 @@
-package digitalmedia;
+package digitalmedia.Übung4;
 
 import ij.*;
 import ij.io.*;
@@ -21,7 +21,7 @@ public class DM_U4 implements PlugInFilter {
 		ImageJ ij = new ImageJ(); // neue ImageJ Instanz starten und anzeigen 
 		ij.exitWhenQuitting(true);
 		
-		IJ.open("/Users/barthel/HTW/internet/meineWebseite/veranstaltungen/GLDM/uebungen/uebung4/StackB.zip");
+		IJ.open("C:\\Users\\Windows 10\\Desktop\\ImageJ\\plugins\\GDM\\digitalmedia\\Übung4\\StackB.zip");
 		
 		DM_U4 sd = new DM_U4();
 		sd.imp = IJ.getImage();
@@ -101,13 +101,35 @@ public class DM_U4 implements PlugInFilter {
 					int gB = (cB & 0x00ff00) >> 8;
 					int bB = (cB & 0x0000ff);
 
+					//wischen
 					if (methode == 1) {
-						if (x+1 > (z-1)*(double)width/(length-1)) {
+						if (y+1 > (z-1)*(double)height/(length-1)) {
 							pixels_Erg[pos] = pixels_B[pos];
 						}
 						else {
 							pixels_Erg[pos] = pixels_A[pos];
 						}
+					}
+					
+					if (methode == 2) {
+						/* cartoon style
+						should be correct according to my calculations- dont know why it looks like ths
+						*/
+						
+						int r = (rA/length*(z-1)+rB/length*(length-(z-1)) );
+						int g = (gA/length*(z-1)+gB/length*(length-(z-1)) );
+						int b = (bA/length*(z-1)+bB/length*(length-(z-1)) );
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
+					}
+					
+					//Schieb-Blende
+					if (methode == 4) {
+						
+						
+						int r = (rA/length*(z-1)+rB/length*(length-(z-1)) );
+						int g = (gA/length*(z-1)+gB/length*(length-(z-1)) );
+						int b = (bA/length*(z-1)+bB/length*(length-(z-1)) );
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 
 					/* copy this!
@@ -127,8 +149,30 @@ public class DM_U4 implements PlugInFilter {
 		// neues Bild anzeigen
 		Erg.show();
 		Erg.updateAndDraw();
+		
+		
 
 	}
 
+	public static int[] RGB2YCbCr(double r, double g, double b){
+		int[] result = new int[3];
+		//Y
+		result[0]= (int) (0.299*r+0.587*g+0.114*b);
+		//Cb
+		result[1]= (int) (-0.168736*r-0.331264*g+0.5*b);
+		//Cr
+		result[2]= (int) (0.5*r-0.418688*g-0.081312*b);
+		return result;
+	}
+	
+	public static int[] YCbCr2RGB(double y, double cb, double cr){
+		int[] result = new int[3];
+		//r
+		result[0]=(int) (y+1.402*cr);
+		//g
+		result[1]=(int) (y-0.3441*cb-0.7141*cr);
+		//b
+		result[2]=(int) (y+1.772*cb);
+		return result;
 }
-
+}

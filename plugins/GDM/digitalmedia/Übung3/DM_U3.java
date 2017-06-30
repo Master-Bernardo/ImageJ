@@ -1,4 +1,4 @@
-package digitalmedia.Ãœbung3;
+package digitalmedia.Übung3;
 
 
 import ij.IJ;
@@ -161,7 +161,7 @@ public class DM_U3 implements PlugIn {
 				blueToRed( pixels, width, height);
 			}
 			if (method.equals("Floyd-Steinberg")) {
-				floydSteinberg(origPixels, pixels, width, height);
+				//floydSteinberg(origPixels, pixels, width, height);
 			}
 			
 		}
