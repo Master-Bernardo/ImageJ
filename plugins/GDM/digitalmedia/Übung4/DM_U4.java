@@ -126,18 +126,16 @@ public class DM_U4 implements PlugInFilter {
 					if (methode == 3) {
 						//TrenngraphGraph = y= x +70  -> drüber ist transparent, drunter ist sichtbar . im CbCr Farbraum
 						
-						
+						//alle Pixel sind erstmal wie im ersten Bild
 						int r = rB;
 						int g = gB;
 						int b = bB;
 						
+						//dann nehme ich mir die Pixel vom 2 Bild und wandle sie in YCbCr um
 						int YCbCr[] =  RGB2YCbCr(rA,gA,bA);
-						//System.out.println(YCbCr[0]);
-						//System.out.println(YCbCr[1]);
-						//System.out.println(YCbCr[2]);
 						
-						//if(Cb+70 > Cr) - wenn dies y,x Werte über dem Trenngraphen liegen
-						if(YCbCr[1]+40 > YCbCr[2]){
+						//if(Cb+10 > Cr) - wenn dies y,x Werte unter dem Trenngraphen liegen
+						if(YCbCr[1]+10 > YCbCr[2]){
 							r=rA;
 							g=gA;
 							b=bA;
@@ -148,6 +146,36 @@ public class DM_U4 implements PlugInFilter {
 							b=bA/2+bB/2;
 						
 						}
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
+					}
+					
+					if (methode == 4) {
+						// Extra kreisblende ( vielleicht mehrere Kreisblenden hintereinander- Wasserwellen nach einem Tropfen)
+						int r1b = (int) Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2))/2; //radius - so groß wie die diagonale/2
+						//Mittelpunkt
+						int xMitte = width/2;
+						int yMitte = height/2;
+						int r,g,b;
+						
+						int deltaX = x - xMitte;
+						int deltaY = y - yMitte;
+						//ändere den Radius
+						//System.out.println("length: "+ length);
+						//System.out.println("z = " + z);
+						//System.out.println("r1b " + r1b);
+						int r1 = r1b/length*z;
+						//150/95*95 =95?!!
+						//System.out.println("r1 " +r1);
+						if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r1, 2)){
+							r = rB;
+							g = gB;
+							b = bB;
+						}else{
+							r=rA;
+							g=gA;
+							b=bA;
+						}
+
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 
