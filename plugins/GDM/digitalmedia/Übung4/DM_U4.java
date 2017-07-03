@@ -163,13 +163,30 @@ public class DM_U4 implements PlugInFilter {
 						//System.out.println("length: "+ length);
 						//System.out.println("z = " + z);
 						//System.out.println("r1b " + r1b);
-						int r1 = r1b/length*z;
+						double cu = r1b/length;
+						int r1 = (int) (cu*z*6);
+						int r2 = (int) (cu*z*0.75*6);
+						int r3 = (int) (cu*z*0.5*6);
+						int r4 = (int) (cu*z*0.25*6);
 						//150/95*95 =95?!!
 						//System.out.println("r1 " +r1);
-						if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r1, 2)){
+						if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r4, 2)){
 							r = rB;
 							g = gB;
 							b = bB;
+						}else if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r3, 2)){
+							r=(int) ((0.75)*rB+(0.25)*rA);
+							g=(int) ((0.75)*gB+(0.25)*gA);
+							b=(int) ((0.75)*bB+(0.25)*bA);
+						}else if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r2, 2)){
+							r=(int) ((0.5)*rB+(0.5)*rA);
+							g=(int) ((0.5)*gB+(0.5)*gA);
+							b=(int) ((0.5)*bB+(0.5)*bA);
+						}else if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r1, 2)){
+							r=(int) ((0.25)*rB+(0.75)*rA);
+							g=(int) ((0.25)*gB+(0.75)*gA);
+							b=(int) ((0.25)*bB+(0.75)*bA);
+							
 						}else{
 							r=rA;
 							g=gA;
