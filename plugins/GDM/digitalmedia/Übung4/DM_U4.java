@@ -122,13 +122,32 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					//Schieb-Blende
-					if (methode == 4) {
+					//Chroma Key
+					if (methode == 3) {
+						//TrenngraphGraph = y= x +70  -> drüber ist transparent, drunter ist sichtbar . im CbCr Farbraum
 						
 						
-						int r = (rA/length*(z-1)+rB/length*(length-(z-1)) );
-						int g = (gA/length*(z-1)+gB/length*(length-(z-1)) );
-						int b = (bA/length*(z-1)+bB/length*(length-(z-1)) );
+						int r = rB;
+						int g = gB;
+						int b = bB;
+						
+						int YCbCr[] =  RGB2YCbCr(rA,gA,bA);
+						//System.out.println(YCbCr[0]);
+						//System.out.println(YCbCr[1]);
+						//System.out.println(YCbCr[2]);
+						
+						//if(Cb+70 > Cr) - wenn dies y,x Werte über dem Trenngraphen liegen
+						if(YCbCr[1]+40 > YCbCr[2]){
+							r=rA;
+							g=gA;
+							b=bA;
+							//Übergangszone, zweiter Graph
+						}else if(YCbCr[1]+10> YCbCr[2]&&YCbCr[1]+20 < YCbCr[2]){
+							r=rA/2+rB/2;
+							g=gA/2+gB/2;
+							b=bA/2+bB/2;
+						
+						}
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 
