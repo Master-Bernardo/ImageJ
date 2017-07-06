@@ -10,7 +10,7 @@ import ij.plugin.filter.*;
 public class DM_U4 implements PlugInFilter {
 
 	protected ImagePlus imp;
-	final static String[] choices = {"Wischen", "Weiche Blende", "Chroma Key", "Extra"};
+	final static String[] choices = { "Wischen", "Weiche Blende", "Overlay", "Schieb-Blende", "Chroma Keying", "Eigene Überblendung"};
 
 	public int setup(String arg, ImagePlus imp) {
 		this.imp = imp;
