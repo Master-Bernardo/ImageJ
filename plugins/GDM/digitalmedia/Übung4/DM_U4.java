@@ -10,7 +10,7 @@ import ij.plugin.filter.*;
 public class DM_U4 implements PlugInFilter {
 
 	protected ImagePlus imp;
-	final static String[] choices = { "Wischen", "Weiche Blende", "Overlay", "Schieb-Blende", "Chroma Keying", "Eigene Überblendung"};
+	final static String[] choices = { "Wischen", "Weiche Blende", "Overlay", "Schieb-Blende", "Chroma-Keying", "Eigene Überblendung"};
 
 	public int setup(String arg, ImagePlus imp) {
 		this.imp = imp;
@@ -109,30 +109,65 @@ public class DM_U4 implements PlugInFilter {
 					int gB = (cB & 0x00ff00) >> 8;
 					int bB = (cB & 0x0000ff);
 
-					//wischen
+					// WISCHEN ************************************************************
 					if (methode == 1) {
-						if (y+1 > (z-1)*(double)height/(length-1)) {
+						if (y + 1 > (z - 1) * (double) width / (length - 1)) {
 							pixels_Erg[pos] = pixels_B[pos];
-						}
-						else {
+						} else {
 							pixels_Erg[pos] = pixels_A[pos];
 						}
 					}
-					
-					//Weiche Blende
+
+					// WEICHE BLENDE ******************************************************
 					if (methode == 2) {
-						/* cartoon style
-						should be correct according to my calculations- dont know why it looks like ths
-						*/
-						
-						int r = (rA/length*(z-1)+rB/length*(length-(z-1)) );
-						int g = (gA/length*(z-1)+gB/length*(length-(z-1)) );
-						int b = (bA/length*(z-1)+bB/length*(length-(z-1)) );
+						/*
+						 * cartoon style should be correct according to my
+						 * calculations- dont know why it looks like ths
+						 */
+
+						int r = (rA / length * (z - 1) + rB / length * (length - (z - 1)));
+						int g = (gA / length * (z - 1) + gB / length * (length - (z - 1)));
+						int b = (bA / length * (z - 1) + bB / length * (length - (z - 1)));
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+					}
+
+					// OVERLAY ************************************************************
+					if (methode == 3) {
+						int r;
+						int g; 
+						int b;
+						r = overlay(rA, rB);
+						g = overlay(gA, gB);
+						b = overlay(bA, bB);
+
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					//Chroma Key
-					if (methode == 3) {
+					// SCHIEB-BLENDE ******************************************************
+					if (methode == 4) {
+						int limit =  (width-1) * (z-1) / (length-1);
+						int r; 
+						int g;
+						int b;
+						int deltaX = x - limit;
+						
+						if (deltaX >= 0) {
+							int newPos = y * width + deltaX;
+							r = (pixels_B[newPos] >> 16) & 0xff;
+							g = (pixels_B[newPos] >>  8) & 0xff;
+							b = (pixels_B[newPos] >>  0) & 0xff;	
+						} else {
+							int newPos = y * width + ((width) + deltaX);
+							r = (pixels_A[newPos] >> 16) & 0xff;
+							g = (pixels_A[newPos] >>  8) & 0xff;
+							b = (pixels_A[newPos] >>  0) & 0xff;
+						}
+						
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
+					}
+					
+					// CHROMA-KEYING ******************************************************
+					if (methode == 5) {
 						//TrenngraphGraph = y= x +70  -> drüber ist transparent, drunter ist sichtbar . im CbCr Farbraum
 						
 						//alle Pixel sind erstmal wie im ersten Bild
@@ -158,7 +193,8 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					if (methode == 4) {
+					// EIGENE ÜBERBLEDUNG *************************************************
+					if (methode == 6) {
 						// Extra kreisblende ( vielleicht mehrere Kreisblenden hintereinander- Wasserwellen nach einem Tropfen)
 						int r1b = (int) Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2))/2; //radius - so groß wie die diagonale/2
 						//Mittelpunkt
@@ -205,19 +241,6 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 
-
-
-					/* copy this!
-					if (methode == 2) {
-						// ...
-					
-						int r = ...
-						int g = ...
-						int b = ...
-
-						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
-					}
-					*/
 				}
 		}
 
