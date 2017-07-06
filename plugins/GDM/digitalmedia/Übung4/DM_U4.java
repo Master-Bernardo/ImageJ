@@ -119,6 +119,7 @@ public class DM_U4 implements PlugInFilter {
 						}
 					}
 					
+					//Weiche Blende
 					if (methode == 2) {
 						/* cartoon style
 						should be correct according to my calculations- dont know why it looks like ths
@@ -204,7 +205,7 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 
-					
+
 
 					/* copy this!
 					if (methode == 2) {
@@ -248,5 +249,15 @@ public class DM_U4 implements PlugInFilter {
 		//b
 		result[2]=(int) (y+1.772*cb);
 		return result;
-}
+	}
+
+	private int overlay(int colA, int colB) {
+		int r;
+		if(colB <= 128) {
+			 r = (colA * colB) / 128;
+		} else {
+			 r = 255 - ((255 - colA) * (255 - colB) / 128);
+		}
+		return r;
+	}
 }
