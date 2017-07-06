@@ -68,12 +68,20 @@ public class DM_U4 implements PlugInFilter {
 		gd.addChoice("Methode",choices,"");
 		gd.showDialog();
 
-		int methode = 0;		
+		int methode = 0;
 		String s = gd.getNextChoice();
-		if (s.equals("Wischen")) methode = 1;
-		if (s.equals("Weiche Blende")) methode = 2;
-		if (s.equals("Chroma Key")) methode = 3;
-		if (s.equals("Extra")) methode = 4;
+		if (s.equals("Wischen"))
+			methode = 1;
+		if (s.equals("Weiche Blende"))
+			methode = 2;
+		if (s.equals("Chroma Key"))
+			methode = 3;
+		if (s.equals("Schieb-Blende"))
+			methode = 4;
+		if (s.equals("Chroma-Keying"))
+			methode = 5;
+		if (s.equals("Eigene Überblendung"))
+			methode = 6;
 
 		// Arrays fuer die einzelnen Bilder
 		int[] pixels_B;
@@ -195,6 +203,8 @@ public class DM_U4 implements PlugInFilter {
 
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
+
+					
 
 					/* copy this!
 					if (methode == 2) {
