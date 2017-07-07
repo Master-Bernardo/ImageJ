@@ -10,7 +10,7 @@ import ij.plugin.filter.*;
 public class DM_U4 implements PlugInFilter {
 
 	protected ImagePlus imp;
-	final static String[] choices = { "Wischen", "Weiche Blende", "Overlay", "Schieb-Blende", "Chroma-Keying", "Eigene Überblendung"};
+	final static String[] choices = { "Wischen", "Weiche Blende", "AB Overlay","BA Overlay", "Schieb-Blende", "Chroma-Keying", "Eigene Überblendung"};
 
 	public int setup(String arg, ImagePlus imp) {
 		this.imp = imp;
@@ -74,14 +74,16 @@ public class DM_U4 implements PlugInFilter {
 			methode = 1;
 		if (s.equals("Weiche Blende"))
 			methode = 2;
-		if (s.equals("Chroma Key"))
+		if (s.equals("AB Overlay"))
 			methode = 3;
-		if (s.equals("Schieb-Blende"))
+		if (s.equals("BA Overlay"))
 			methode = 4;
-		if (s.equals("Chroma-Keying"))
+		if (s.equals("Schieb-Blende"))
 			methode = 5;
-		if (s.equals("Eigene Überblendung"))
+		if (s.equals("Chroma-Keying"))
 			methode = 6;
+		if (s.equals("Eigene Überblendung"))
+			methode = 7;
 
 		// Arrays fuer die einzelnen Bilder
 		int[] pixels_B;
@@ -133,18 +135,39 @@ public class DM_U4 implements PlugInFilter {
 
 					//TODO OVERLAY ********************************************************
 					if (methode == 3) {
-						int r;
-						int g; 
-						int b;
-						r = overlay(rA, rB);
-						g = overlay(gA, gB);
-						b = overlay(bA, bB);
+						//Overlay AB, A Vordergrund
+						int r, g, b;
+
+						if (rA <= 128)  r = rA * rB / 128;
+						else r = 255 - (255 - rA) * (255 - rB) / 128;
+
+						if (gA <= 128) g = gA * gB / 128;
+						else g = 255 - (255 - gA) * (255 - gB) / 128;
+
+						if (bA <= 128)b = bA * bB / 128;
+						else b = 255 - (255 - bA) * (255 - bB) / 128;
+
 
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					//TODO SCHIEB-BLENDE **************************************************
 					if (methode == 4) {
+						///Overlay BA, B Vordergrund
+						int r, g, b;
+
+						if (rB <= 128)  r = rB * rA / 128;
+						else r = 255 - (255 - rB) * (255 - rA) / 128;
+
+						if (gB <= 128) g = gB * gA / 128;
+						else g = 255 - (255 - gB) * (255 - gA) / 128;
+
+						if (bB <= 128)b = bB * bA / 128;
+						else b = 255 - (255 - bB) * (255 - bA) / 128;
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
+					}
+					
+					//TODO SCHIEB-BLENDE **************************************************
+					if (methode == 5) {
 						int limit =  (width-1) * (z-1) / (length-1);
 						int r; 
 						int g;
@@ -167,7 +190,7 @@ public class DM_U4 implements PlugInFilter {
 					}
 					
 					//TODO CHROMA-KEYING **************************************************
-					if (methode == 5) {
+					if (methode == 6) {
 						//TrenngraphGraph = y= x +70  -> drüber ist transparent, drunter ist sichtbar . im CbCr Farbraum
 						
 						//alle Pixel sind erstmal wie im ersten Bild
@@ -194,7 +217,7 @@ public class DM_U4 implements PlugInFilter {
 					}
 					
 					//TODO EIGENE ÜBERBLENDUNG *********************************************
-					if (methode == 6) {
+					if (methode == 7) {
 						// Extra kreisblende ( vielleicht mehrere Kreisblenden hintereinander- Wasserwellen nach einem Tropfen)
 						int r1b = (int) Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2))/2; //radius - so groß wie die diagonale/2
 						//Mittelpunkt
