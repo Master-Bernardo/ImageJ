@@ -172,7 +172,7 @@ public class DM_U5 implements PlugIn
 				int b =  argb        & 0xff;
 	
 				//Pixel links von unserem
-				pos = y*imwidth + x-1
+				pos = y*imwidth + x-1;
 				
 				int rn = r/2;
 				int gn = g/2;

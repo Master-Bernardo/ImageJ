@@ -1,4 +1,3 @@
 INDEX VERSION 1.130+C:\Users\Windows 10\Desktop\ImageJ\plugins\.metadata\.plugins\org.eclipse.jdt.core
 2226832491.index
 981137080.index
-1228030831.index
