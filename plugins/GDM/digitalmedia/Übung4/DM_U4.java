@@ -10,7 +10,7 @@ import ij.plugin.filter.*;
 public class DM_U4 implements PlugInFilter {
 
 	protected ImagePlus imp;
-	final static String[] choices = { "Wischen", "Weiche Blende", "AB Overlay","BA Overlay", "Schieb-Blende", "Chroma-Keying", "Eigene ‹berblendung"};
+	final static String[] choices = { "Wischen", "Weiche Blende", "AB Overlay","BA Overlay", "Schieb-Blende", "Chroma-Keying", "Eigene ‹berblendung", "Eigene ‹berblendung2"};
 
 	public int setup(String arg, ImagePlus imp) {
 		this.imp = imp;
@@ -84,6 +84,8 @@ public class DM_U4 implements PlugInFilter {
 			methode = 6;
 		if (s.equals("Eigene ‹berblendung"))
 			methode = 7;
+		if (s.equals("Eigene ‹berblendung2"))
+			methode = 8;
 
 		// Arrays fuer die einzelnen Bilder
 		int[] pixels_B;
@@ -218,6 +220,53 @@ public class DM_U4 implements PlugInFilter {
 					
 					//TODO EIGENE ‹BERBLENDUNG *********************************************
 					if (methode == 7) {
+						// Extra kreisblende ( vielleicht mehrere Kreisblenden hintereinander- Wasserwellen nach einem Tropfen)
+						int r1b = (int) Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2))/2; //radius - so groﬂ wie die diagonale/2
+						//Mittelpunkt
+						int xMitte = width/2;
+						int yMitte = height/2;
+						int r,g,b;
+						
+						int deltaX = x - xMitte;
+						int deltaY = y - yMitte;
+						//‰ndere den Radius
+						//System.out.println("length: "+ length);
+						//System.out.println("z = " + z);
+						//System.out.println("r1b " + r1b);
+						double cu = r1b/length;
+						int r1 = (int) (cu*z*6);
+						int r2 = (int) (cu*z*0.75*6);
+						int r3 = (int) (cu*z*0.5*6);
+						int r4 = (int) (cu*z*0.25*6);
+						//150/95*95 =95?!!
+						//System.out.println("r1 " +r1);
+						if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r4, 2)){
+							r = rB;
+							g = gB;
+							b = bB;
+						}else if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r3, 2)){
+							r=(int) ((0.75)*rB+(0.25)*rA);
+							g=(int) ((0.75)*gB+(0.25)*gA);
+							b=(int) ((0.75)*bB+(0.25)*bA);
+						}else if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r2, 2)){
+							r=(int) ((0.5)*rB+(0.5)*rA);
+							g=(int) ((0.5)*gB+(0.5)*gA);
+							b=(int) ((0.5)*bB+(0.5)*bA);
+						}else if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(r1, 2)){
+							r=(int) ((0.25)*rB+(0.75)*rA);
+							g=(int) ((0.25)*gB+(0.75)*gA);
+							b=(int) ((0.25)*bB+(0.75)*bA);
+							
+						}else{
+							r=rA;
+							g=gA;
+							b=bA;
+						}
+
+						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
+					}
+					
+					if (methode == 8) {
 						// Extra kreisblende ( vielleicht mehrere Kreisblenden hintereinander- Wasserwellen nach einem Tropfen)
 						int r1b = (int) Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2))/2; //radius - so groﬂ wie die diagonale/2
 						//Mittelpunkt
