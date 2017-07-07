@@ -514,7 +514,7 @@ public class DM_U3 implements PlugIn {
 					
 					if(y<height/2){
 						//rn = (int) (rn*0.299+gn*0.587+bn*0.114);
-						rn+=randomer.nextInt(101)-50;
+						rn+=randomer.nextInt(256)-128;
 						if(rn<128)rn=0;
 						else rn = 255;
 					}
