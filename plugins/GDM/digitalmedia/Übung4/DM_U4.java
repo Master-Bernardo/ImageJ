@@ -109,7 +109,7 @@ public class DM_U4 implements PlugInFilter {
 					int gB = (cB & 0x00ff00) >> 8;
 					int bB = (cB & 0x0000ff);
 
-					// WISCHEN ************************************************************
+					//TODO WISCHEN ********************************************************
 					if (methode == 1) {
 						if (y + 1 > (z - 1) * (double) width / (length - 1)) {
 							pixels_Erg[pos] = pixels_B[pos];
@@ -118,7 +118,7 @@ public class DM_U4 implements PlugInFilter {
 						}
 					}
 
-					// WEICHE BLENDE ******************************************************
+					//TODO WEICHE BLENDE **************************************************
 					if (methode == 2) {
 						/*
 						 * cartoon style should be correct according to my
@@ -131,7 +131,7 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 					}
 
-					// OVERLAY ************************************************************
+					//TODO OVERLAY ********************************************************
 					if (methode == 3) {
 						int r;
 						int g; 
@@ -143,7 +143,7 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					// SCHIEB-BLENDE ******************************************************
+					//TODO SCHIEB-BLENDE **************************************************
 					if (methode == 4) {
 						int limit =  (width-1) * (z-1) / (length-1);
 						int r; 
@@ -166,7 +166,7 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					// CHROMA-KEYING ******************************************************
+					//TODO CHROMA-KEYING **************************************************
 					if (methode == 5) {
 						//TrenngraphGraph = y= x +70  -> drüber ist transparent, drunter ist sichtbar . im CbCr Farbraum
 						
@@ -193,7 +193,7 @@ public class DM_U4 implements PlugInFilter {
 						pixels_Erg[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 					}
 					
-					// EIGENE ÜBERBLEDUNG *************************************************
+					//TODO EIGENE ÜBERBLENDUNG *********************************************
 					if (methode == 6) {
 						// Extra kreisblende ( vielleicht mehrere Kreisblenden hintereinander- Wasserwellen nach einem Tropfen)
 						int r1b = (int) Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2))/2; //radius - so groß wie die diagonale/2
