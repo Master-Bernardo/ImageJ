@@ -1,4 +1,4 @@
-package digitalmedia.Übung5;
+//package digitalmedia.Uebung5;
 
 
 //import gdmvalidation.Ueb5Validation;
@@ -31,7 +31,7 @@ public class DM_U5 implements PlugIn
 		ImageJ ij = new ImageJ();
 		ij.exitWhenQuitting(true);
 		//TODO open your image here
-		IJ.open("C:\\Users\\Windows 10\\Desktop\\ImageJ\\plugins\\GDM\\digitalmedia\\Übung5\\sail.jpg");
+		IJ.open("C:\\Users\\Windows 10\\Desktop\\ImageJ\\plugins\\GDM\\digitalmedia\\ï¿½bung5\\sail.jpg");
 		DM_U5 pw = new DM_U5();
 		pw.imp = IJ.getImage();
 		pw.run("");
@@ -156,7 +156,11 @@ public class DM_U5 implements PlugIn
 			}
 		}
 	}
-
+	
+	int rk = 0;
+	int gk = 0;
+	int bk = 0;
+	
 	/*
 	 * Weichzeichnen (lowPass)
 	 */
@@ -166,17 +170,29 @@ public class DM_U5 implements PlugIn
 			for (int x=0; x<imwidth; x++) {
 				int pos = y*imwidth + x;
 				int argb = origPixels[pos];  // Lesen der Originalwerte 
-	
-				int r = (argb >> 16) & 0xff;
-				int g = (argb >>  8) & 0xff;
-				int b =  argb        & 0xff;
-	
-				//Pixel links von unserem
-				pos = y*imwidth + x-1;
 				
-				int rn = r/2;
-				int gn = g/2;
-				int bn = b/2;
+				
+				//Kernel
+				for(int i=-1;i<2;i++){
+					for(int j=-1;j<2;j++){
+						int posNew = Math.min(Math.max(0,(y+i)),imheight-1)*imwidth+Math.min(Math.max(0,(x+j)), imwidth-1);
+						argb = origPixels[posNew];
+						this.rk += (argb >> 16) & 0xff;
+						this.gk += (argb >>  8) & 0xff;
+						this.bk +=  argb        & 0xff;
+					}
+				}
+				
+				rk = this.rk/9;
+				gk = this.gk/9;
+				bk = this.bk/9;
+				
+				
+				
+				
+				int rn = rk;
+				int gn = gk;
+				int bn = bk;
 	
 				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
 			}
@@ -188,6 +204,25 @@ public class DM_U5 implements PlugIn
 	 */
 	private void highPass(int[] origPixels, int[] newpixels, int imwidth, int imheight) {
 		// TODO Auto-generated method stub
+		for (int y=0; y<imheight; y++) {
+			for (int x=0; x<imwidth; x++) {
+				int pos = y*imwidth + x;
+				int argb = origPixels[pos];  // Lesen der Originalwerte 
+	
+				int r = (argb >> 16) & 0xff;
+				int g = (argb >>  8) & 0xff;
+				int b =  argb        & 0xff;
+	
+				
+				
+				//Hochpass = Original - Tiefpass
+				int rn = r-rk;
+				int gn = g-gk;
+				int bn = b-bk;
+	
+				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
+			}
+		}
 	}
 
 	/*
