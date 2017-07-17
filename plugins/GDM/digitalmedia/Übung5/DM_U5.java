@@ -161,10 +161,28 @@ public class DM_U5 implements PlugIn
 	int gk = 0;
 	int bk = 0;
 	
+<<<<<<< HEAD
+	//lowpass
+	int lprn;
+	int lpgn;
+	int lpbn;
+	int[] lowpass;
+	
+	//highpass
+	int hprn;
+	int hpgn;
+	int hpbn;
+	int[] highpass;
+	
+=======
+>>>>>>> origin/master
 	/*
 	 * Weichzeichnen (lowPass)
 	 */
 	private void lowPass(int[] origPixels, int[] newpixels, int imwidth, int imheight) {
+		
+		lowpass = new int[imwidth*imheight];
+		
 		// TODO Auto-generated method stub
 		for (int y=0; y<imheight; y++) {
 			for (int x=0; x<imwidth; x++) {
@@ -187,6 +205,15 @@ public class DM_U5 implements PlugIn
 				gk = this.gk/9;
 				bk = this.bk/9;
 				
+<<<<<<< HEAD
+								
+				lprn = normalize(rk);
+				lpgn = normalize(gk);
+				lpbn = normalize(bk);
+				
+				lowpass[pos] = (0xFF<<24) | (lprn<<16) | (lpgn << 8) | lpbn;
+				newpixels[pos] = (0xFF<<24) | (lprn<<16) | (lpgn << 8) | lpbn;
+=======
 				
 				
 				
@@ -195,6 +222,7 @@ public class DM_U5 implements PlugIn
 				int bn = bk;
 	
 				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
+>>>>>>> origin/master
 			}
 		}
 	}
@@ -203,6 +231,9 @@ public class DM_U5 implements PlugIn
 	 * Hochpass
 	 */
 	private void highPass(int[] origPixels, int[] newpixels, int imwidth, int imheight) {
+		
+		highpass = new int[imwidth*imheight];
+		
 		// TODO Auto-generated method stub
 		for (int y=0; y<imheight; y++) {
 			for (int x=0; x<imwidth; x++) {
@@ -213,6 +244,21 @@ public class DM_U5 implements PlugIn
 				int g = (argb >>  8) & 0xff;
 				int b =  argb        & 0xff;
 	
+<<<<<<< HEAD
+				int argbLp = lowpass[pos];  // Lesen der Lowpasswerte
+				
+				int rlp = (argbLp >> 16) & 0xff;
+				int glp = (argbLp >>  8) & 0xff;
+				int blp =  argbLp        & 0xff;
+				
+				//Hochpass = Original - Tiefpass
+				int hprn = r-rlp;
+				int hpgn = g-glp;
+				int hpbn = b-blp;
+	
+				highpass[pos] = (0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
+				newpixels[pos] = (0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
+=======
 				
 				
 				//Hochpass = Original - Tiefpass
@@ -221,6 +267,7 @@ public class DM_U5 implements PlugIn
 				int bn = b-bk;
 	
 				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
+>>>>>>> origin/master
 			}
 		}
 	}
@@ -229,7 +276,36 @@ public class DM_U5 implements PlugIn
 	 * Unscharf maskieren
 	 */
 	private void unsharpMask(int[] origPixels, int[] newpixels, int imwidth, int imheight) {
-		// TODO Auto-generated method stub
+		for (int y=0; y<imheight; y++) {
+			for (int x=0; x<imwidth; x++) {
+				int pos = y*imwidth + x;
+				int argb = origPixels[pos];  // Lesen der Originalwerte 
+	
+				int r = (argb >> 16) & 0xff;
+				int g = (argb >>  8) & 0xff;
+				int b =  argb        & 0xff;
+	
+				int argbHp = lowpass[pos];  // Lesen der Highpasswerte
+				
+				int rHp = (argbHp >> 16) & 0xff;
+				int gHp = (argbHp >>  8) & 0xff;
+				int bHp =  argbHp        & 0xff;
+				
+				//Unscharf Maskieren = Original + Hochpass
+				int rn = normalize(r+rHp/3);
+				int gn = normalize(g+gHp/3);
+				int bn = normalize(b+bHp/3);
+	
+				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
+			}
+		}
+	}
+	
+	private int normalize(int value){
+		if(value<=0) value = 0;
+		if (value>=255) value = 255;
+		
+		return value;
 	}
 
 	/*
