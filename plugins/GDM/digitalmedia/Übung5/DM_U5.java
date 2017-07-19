@@ -234,8 +234,17 @@ public class DM_U5 implements PlugIn
 				int g = (argb >>  8) & 0xff;
 				int b =  argb        & 0xff;
 				
+				int argbLP = lowpass[pos];
 				
+				int rLP = (argbLP >> 16) & 0xff;
+				int gLP = (argbLP >>  8) & 0xff;
+				int bLP =  argbLP        & 0xff;
 				
+				hprn = Math.abs(r - rLP)+128;
+				hpgn = Math.abs(g - gLP)+128;
+				hpbn = Math.abs(b - bLP)+128;
+				
+				/*
 				
 				int rk =r*8;
 				int gk =g*8;
@@ -264,6 +273,8 @@ public class DM_U5 implements PlugIn
 				hprn = normalize(rk);
 				hpgn = normalize(gk);
 				hpbn = normalize(bk);
+				
+				*/
 
 				highpass[pos] = (0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
 				newpixels[pos] = (0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
@@ -285,16 +296,16 @@ public class DM_U5 implements PlugIn
 				int g = (argb >>  8) & 0xff;
 				int b =  argb        & 0xff;
 	
-				int argbHp = highpass[pos];  // Lesen der Highpasswerte
+				int argbLp = lowpass[pos];  // Lesen der Highpasswerte
 				
-				int rHp = (argbHp >> 16) & 0xff;
-				int gHp = (argbHp >>  8) & 0xff;
-				int bHp =  argbHp        & 0xff;
+				int rLp = (argbLp>> 16) & 0xff;
+				int gLp = (argbLp >>  8) & 0xff;
+				int bLp =  argbLp        & 0xff;
 				
 				//Unscharf Maskieren = Original + Hochpass
-				int rn = normalize(r+rHp/4);
-				int gn = normalize(g+gHp/4);
-				int bn = normalize(b+bHp/4);
+				int rn = normalize((2*r)-(rLp));
+				int gn = normalize((2*g)-(gLp));
+				int bn = normalize((2*b)-(bLp));
 	
 				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
 			}
