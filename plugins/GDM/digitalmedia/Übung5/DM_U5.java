@@ -198,7 +198,7 @@ public class DM_U5 implements PlugIn
 					}
 				}
 				
-				rk = this.rk/9;
+				rk = this.rk/9; //ungenau
 				gk = this.gk/9;
 				bk = this.bk/9;
 				
@@ -208,8 +208,7 @@ public class DM_U5 implements PlugIn
 				lpgn = normalize(gk);
 				lpbn = normalize(bk);
 				
-				lowpass[pos] = (0xFF<<24) | (lprn<<16) | (lpgn << 8) | lpbn;
-				newpixels[pos] = (0xFF<<24) | (lprn<<16) | (lpgn << 8) | lpbn;
+				newpixels[pos] = lowpass[pos] = (0xFF<<24) | (lprn<<16) | (lpgn << 8) | lpbn;
 
 
 			}
@@ -240,44 +239,12 @@ public class DM_U5 implements PlugIn
 				int gLP = (argbLP >>  8) & 0xff;
 				int bLP =  argbLP        & 0xff;
 				
-				hprn = Math.abs(r - rLP)+128;
-				hpgn = Math.abs(g - gLP)+128;
-				hpbn = Math.abs(b - bLP)+128;
+				hprn = r - rLP + 128;
+				hpgn = g - gLP +128;
+				hpbn = b - bLP +128;
 				
-				/*
 				
-				int rk =r*8;
-				int gk =g*8;
-				int bk =b*8;
-
-				
-				//oder anderer Kernel
-				//Kernel
-				for(int i=-1;i<2;i++){
-					for(int j=-1;j<2;j++){
-						int posNew = Math.min(Math.max(0,(y+i)),imheight-1)*imwidth+Math.min(Math.max(0,(x+j)), imwidth-1);
-						argb = origPixels[posNew];
-						
-						r = (argb >> 16) & 0xff;
-						g = (argb >>  8) & 0xff;
-						b =  argb        & 0xff;
-						
-						if(i!=0&&j!=0){
-							rk -= r;
-							gk -= g;
-							bk -= b;
-						}
-					}
-				}
-								
-				hprn = normalize(rk);
-				hpgn = normalize(gk);
-				hpbn = normalize(bk);
-				
-				*/
-
-				highpass[pos] = (0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
-				newpixels[pos] = (0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
+				newpixels[pos] = highpass[pos] =(0xFF<<24) | (hprn<<16) | (hpgn << 8) | hpbn;
 
 			}
 		}
@@ -302,10 +269,20 @@ public class DM_U5 implements PlugIn
 				int gLp = (argbLp >>  8) & 0xff;
 				int bLp =  argbLp        & 0xff;
 				
-				//Unscharf Maskieren = Original + Hochpass
-				int rn = normalize((2*r)-(rLp));
-				int gn = normalize((2*g)-(gLp));
-				int bn = normalize((2*b)-(bLp));
+				int argbHp = highpass[pos];  // Lesen der Highpasswerte
+				
+				int rHp = (argbHp>> 16) & 0xff;
+				int gHp = (argbHp >>  8) & 0xff;
+				int bHp =  argbHp        & 0xff;
+				
+				//Unscharf Maskieren = Original + Hochpass oder 2*original -Lowpass
+				//int rn = normalize((2*r)-(rLp));
+				//int gn = normalize((2*g)-(gLp));
+				//int bn = normalize((2*b)-(bLp));
+				
+				int rn = normalize((r)+(rHp-128));
+				int gn = normalize((g)+(gHp-128));
+				int bn = normalize((b)+(bHp-128));
 	
 				newpixels[pos] = (0xFF<<24) | (rn<<16) | (gn << 8) | bn;
 			}
