@@ -159,7 +159,7 @@ public class DM_U6 implements PlugInFilter {
 				double pointX = xNew*ratioX; 
 		    	double pointY = yNew*ratioY;
 				
-		    	//genauer Pixel
+		    	//OriginalPixel aus welchen wir uns Weete nehmen
 		    	int pixX = (int) Math.floor(xNew*ratioX); 
 		    	int pixY = (int) Math.floor(yNew*ratioY);
 				
